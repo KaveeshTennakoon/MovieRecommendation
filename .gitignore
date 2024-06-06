@@ -1,0 +1,7 @@
+debug.log
+db.sqlite3
+
+recommender/__pycache__
+recommender/migrations
+
+movie_recommender/__pycache__

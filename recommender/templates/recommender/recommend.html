@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendations for {{ selected_movie.title }}</title>
+    <style>
+        .movie-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .movie-item img {
+            width: 100px;
+            height: 150px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recommendations for {{ selected_movie.title }}</h1>
+    <img src="{{ selected_movie.poster_url }}" alt="{{ selected_movie.title }}" style="width:200px; height:300px;">
+    <h2>Recommended Movies:</h2>
+    <ul>
+        {% for title, poster_url in recommendations %}
+            <li class="movie-item">
+                <img src="{{ poster_url }}" alt="{{ title }}">
+                <span>{{ title }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'index' %}">Go back</a>
+</body>
+</html>

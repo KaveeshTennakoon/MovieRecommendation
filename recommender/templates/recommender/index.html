@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Recommender</title>
+    <style>
+        .movie-item {
+            display: flex;
+            align-items: center;
+        }
+        .movie-item img {
+            width: 50px;
+            height: 75px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Recommender</h1>
+    <form method="post" action="{% url 'recommend' %}">
+        {% csrf_token %}
+        <label for="movie">Select a Movie:</label>
+        <select name="movie" id="movie">
+            <option value="">Select a movie</option>
+            {% for movie in movie_data %}
+                <option value="{{ movie.title }}" data-poster="{{ movie.poster_url }}">{{ movie.title }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Get Recommendations</button>
+    </form>
+</body>
+</html>
