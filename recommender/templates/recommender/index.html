@@ -20,11 +20,11 @@
             text-align: center;
         }
         .container {
-            max-width: 600px; /* Increased max-width */
+            max-width: 600px;
             background: #1c1b1b;
-            padding: 40px; /* Increased padding */
+            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
             text-align: center;
         }
         form {
@@ -36,34 +36,50 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
-        select, button {
-            padding: 10px;
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
             margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+        }
+        .autocomplete-list {
+            position: absolute;
+            top: 40px;
             width: 100%;
-            max-width: 400px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #333;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+            color: #e6e2e2;
+        }
+        .autocomplete-item:hover {
+            background: #555;
         }
         button {
+            padding: 10px;
             background-color: #007BFF;
             color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            max-width: 50%;
         }
         button:hover {
             background-color: #0056b3;
-        }
-        .movie-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .movie-item img {
-            width: 50px;
-            height: 75px;
-            margin-right: 10px;
-            border-radius: 5px;
         }
     </style>
 </head>
@@ -73,14 +89,51 @@
         <form method="post" action="{% url 'recommend' %}">
             {% csrf_token %}
             <label for="movie">Select a Movie:</label>
-            <select name="movie" id="movie">
-                <option value="">Select a movie</option>
-                {% for movie in movie_data %}
-                    <option value="{{ movie.title }}" data-poster="{{ movie.poster_url }}">{{ movie.title }}</option>
-                {% endfor %}
-            </select>
+            <div class="search-container">
+                <input type="text" id="movie-search" class="search-input" placeholder="Type to search movies...">
+                <div id="autocomplete-list" class="autocomplete-list"></div>
+            </div>
+            <input type="hidden" name="movie" id="selected-movie">
             <button type="submit">Get Recommendations</button>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const movieData = [
+                {% for movie in movie_data %}
+                    { title: "{{ movie.title|escapejs }}", poster_url: "{{ movie.poster_url|escapejs }}" },
+                {% endfor %}
+            ];
+
+            const searchInput = document.getElementById('movie-search');
+            const autocompleteList = document.getElementById('autocomplete-list');
+            const selectedMovieInput = document.getElementById('selected-movie');
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                autocompleteList.innerHTML = '';
+                if (query.length > 0) {
+                    const filteredMovies = movieData.filter(movie => movie.title.toLowerCase().includes(query));
+                    filteredMovies.forEach(movie => {
+                        const item = document.createElement('div');
+                        item.classList.add('autocomplete-item');
+                        item.textContent = movie.title;
+                        item.addEventListener('click', function() {
+                            searchInput.value = movie.title;
+                            selectedMovieInput.value = movie.title;
+                            autocompleteList.innerHTML = '';
+                        });
+                        autocompleteList.appendChild(item);
+                    });
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target !== searchInput && e.target !== autocompleteList) {
+                    autocompleteList.innerHTML = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
