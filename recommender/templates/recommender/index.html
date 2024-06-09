@@ -1,32 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommender</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #e6e2e2;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px; /* Increased max-width */
+            background: #1c1b1b;
+            padding: 40px; /* Increased padding */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        select, button {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
         .movie-item {
             display: flex;
             align-items: center;
+            margin-bottom: 10px;
         }
         .movie-item img {
             width: 50px;
             height: 75px;
             margin-right: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Movie Recommender</h1>
-    <form method="post" action="{% url 'recommend' %}">
-        {% csrf_token %}
-        <label for="movie">Select a Movie:</label>
-        <select name="movie" id="movie">
-            <option value="">Select a movie</option>
-            {% for movie in movie_data %}
-                <option value="{{ movie.title }}" data-poster="{{ movie.poster_url }}">{{ movie.title }}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-        <button type="submit">Get Recommendations</button>
-    </form>
+    <div class="container">
+        <h1>Movie Recommender</h1>
+        <form method="post" action="{% url 'recommend' %}">
+            {% csrf_token %}
+            <label for="movie">Select a Movie:</label>
+            <select name="movie" id="movie">
+                <option value="">Select a movie</option>
+                {% for movie in movie_data %}
+                    <option value="{{ movie.title }}" data-poster="{{ movie.poster_url }}">{{ movie.title }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Get Recommendations</button>
+        </form>
+    </div>
 </body>
 </html>
