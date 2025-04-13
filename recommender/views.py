@@ -13,7 +13,7 @@ cv = CountVectorizer(max_features=5000, stop_words='english')
 vector = cv.fit_transform(movies['tags']).toarray()
 similarity = cosine_similarity(vector)
 
-TMDB_API_KEY = '88d9e0022cf2977339c698b418838cae'
+TMDB_API_KEY = 'your_tmdb_api_key'
 
 def get_poster_url(title):
     url = f"https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={title}"

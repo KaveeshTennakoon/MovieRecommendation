@@ -13,7 +13,7 @@ Django Movie Recommender is a web application that recommends movies based on us
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/django-movie-recommender.git
+    git clone https://github.com/KaveeshTennakoon/MovieRecommendation.git
     ```
 
 2. Navigate to the project directory:
